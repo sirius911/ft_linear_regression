@@ -45,7 +45,8 @@ def main():
     evol_mse = mylr.fit_(x, y)
     y_hat = mylr.predict_(x)
     mse = MyLR.mse_(y, y_hat)
-    print(mylr.thetas)
+    theta0 = (-(mylr.thetas[1]*scaler_x.mean_*scaler_y.std_ / scaler_x.std_)) + scaler_y.mean_ + (scaler_y.std_*mylr.thetas[0])
+    theta1 = mylr.thetas[1] * scaler_y.std_ / scaler_x.std_
 
     #graph
     plt.figure()
@@ -53,7 +54,7 @@ def main():
     plt.xlabel("iterations")
     label = f"\nMse = {mse}"
     plt.ylabel("mse")
-    plt.title(rf'$\theta_0 = {float(mylr.thetas[0][0]):0.2e}~&~\theta_1 = {float(mylr.thetas[1][0]):0.2e}${label}')
+    plt.title(rf'$\theta_0 = {float(theta0):0.2f}~&~\theta_1 = {float(theta1):0.2e}${label}')
 
     plt.figure()
     plt.scatter(km, price, c="b", marker='o', label='real data')
@@ -66,14 +67,10 @@ def main():
     plt.show()
 
     #save model
-    print(f"Saving model with theta0 = {yellow}{float(mylr.thetas[0][0]):0.2e}{reset} and thetha1 = {yellow}{float(mylr.thetas[1][0]):0.2e}{reset}... ", end='')
+    print(f"Saving model with theta0 = {yellow}{float(theta0):0.2e}{reset} and thetha1 = {yellow}{float(theta1):0.2e}{reset}... ", end='')
     model = {}
-    model['theta0'] = float(mylr.thetas[0][0])
-    model['theta1'] = float(mylr.thetas[1][0])
-    model['mean_x'] = float(scaler_x.mean_)
-    model['mean_y'] = float(scaler_y.mean_)
-    model['std_x'] = float(scaler_x.std_)
-    model['std_y'] = float(scaler_y.std_)
+    model['theta0'] = float(theta0)
+    model['theta1'] = float(theta1)
     print(f"{green}Ok{reset}")
 
     with open('model.yaml', 'w') as outfile:

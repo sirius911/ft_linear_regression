@@ -35,9 +35,7 @@ def main_loop():
             return
         xx = control(mileage)
         if xx is not None:
-            xx = scaler_x.norme(xx)
             yy = theta[0] + theta[1] * xx
-            yy = scaler_y.inverse(yy)
             price = round(yy[0][0], 2)
             if price < 0 :
                 price = 0
@@ -54,10 +52,6 @@ if __name__ == "__main__":
     if model is None:
         print("No trained model")
     else:
-        scaler_x.mean_ = model['mean_x']
-        scaler_y.mean_ = model['mean_y']
-        scaler_x.std_ = model['std_x']
-        scaler_y.std_ = model['std_y']
         theta = (model['theta0'], model['theta1'])
     print(f"Prediction with [{theta}]")
     main_loop()
